@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dashboard de Producción</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"
+    />
+    <style>
+      .main-chart-container {
+        height: 400px;
+        margin-bottom: 20px;
+      }
+      .small-chart-container {
+        height: 300px;
+        margin-bottom: 20px;
+      }
+      .chart-view {
+        height: 100%;
+        width: 100%;
+      }
+      .chart-btn {
+        transition: all 0.3s;
+      }
+      .chart-btn.active {
+        background-color: #ff69b4;
+        color: white;
+        border-color: #ff69b4;
+      }
+      #chart-placeholder {
+        height: 100%;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Bootstrap grid setup -->
+    <div class="container">
+      <h1 class="text-center mb-4">Dashboard de Producción</h1>
+
+      <!-- Controles de tiempo -->
+      <div class="row position-relative mb-4">
+        <div class="col-12 text-center">
+          <button id="prev-btn" class="btn btn-outline-primary">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <span id="timeframe-label" class="mx-3">Daily</span>
+          <button id="next-btn" class="btn btn-outline-primary">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Gráfica principal de producción -->
+      <div class="row mb-4">
+        <div class="col-12 main-chart-container" id="chart-production"></div>
+      </div>
+
+      <!-- Botones para gráficas secundarias -->
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <div class="btn-group" role="group" aria-label="Gráficas secundarias">
+            <button
+              id="btn-delay"
+              class="btn btn-outline-primary chart-btn"
+              data-chart="delay"
+            >
+              Retraso
+            </button>
+            <button
+              id="btn-accidents"
+              class="btn btn-outline-primary chart-btn"
+              data-chart="accidents"
+            >
+              Accidentes
+            </button>
+            <button
+              id="btn-rejected"
+              class="btn btn-outline-primary chart-btn"
+              data-chart="rejected"
+            >
+              Rechazos
+            </button>
+            <button
+              id="btn-occupancy"
+              class="btn btn-outline-primary chart-btn"
+              data-chart="occupancy"
+            >
+              Ocupación
+            </button>
+            <button
+              id="btn-rejection-percentage"
+              class="btn btn-outline-primary chart-btn"
+              data-chart="rejection-percentage"
+            >
+              % Rechazo
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenedor para la gráfica secundaria seleccionada -->
+      <div class="row">
+        <div
+          class="col-12 small-chart-container"
+          id="secondary-chart-container"
+        >
+          <!-- Las gráficas secundarias se mostrarán aquí dinámicamente -->
+          <div id="chart-delay" class="chart-view" style="display: none"></div>
+          <div
+            id="chart-accidents"
+            class="chart-view"
+            style="display: none"
+          ></div>
+          <div
+            id="chart-rejected"
+            class="chart-view"
+            style="display: none"
+          ></div>
+          <div
+            id="chart-occupancy"
+            class="chart-view"
+            style="display: none"
+          ></div>
+          <div
+            id="chart-rejection-percentage"
+            class="chart-view"
+            style="display: none"
+          ></div>
+          <div
+            id="chart-placeholder"
+            class="d-flex justify-content-center align-items-center h-100"
+          >
+            <p class="text-center text-muted">
+              Selecciona un botón para ver la gráfica correspondiente
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- External JS libraries -->
+    <script src="js/d3.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+  </body>
+</html>
