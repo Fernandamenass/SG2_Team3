@@ -1,10 +1,22 @@
 let chartData; // Datos de la gráfica
-const timeFrames = ["daily", "weekly", "monthly"];
+const timeFrames = ["daily", "weekly", "monthly", "quarter", "year"];
+
 const timeFrameLabels = {
   daily: "Daily",
   weekly: "Weekly",
   monthly: "Monthly",
+  quarter: "Quarterly",
+  year: "Yearly",
 }; // Etiquetas de tiempo
+
+const timeFrameKeyMap = {
+  daily: "daily_data",
+  weekly: "weekly_data",
+  monthly: "monthly_data",
+  quarter: "quarterly_data",
+  year: "yearly_data",
+};
+
 let currentTimeFrameIndex = 0;
 
 // Configuración de cada gráfica con nuevos tipos
@@ -133,11 +145,12 @@ function initializeCharts() {
     g.append("text")
       .attr("class", "chart-title")
       .attr("x", width / 2)
-      .attr("y", config.isMainChart ? -30 : -15)
+      .attr("y", config.isMainChart ? -40 : -25) // Subimos un poco más el texto para dar espacio
       .style("text-anchor", "middle")
-      .style("fill", "#ff69b4")
+      .style("fill", "#d81b60") // Un rosa elegante
       .style("font-size", titleFontSize)
-      .style("font-family", "'Comic Sans MS', cursive")
+      .style("font-family", "'Poppins', 'Helvetica Neue', sans-serif") // Adiós Comic Sans
+      .style("font-weight", "600")
       .text(config.title);
 
     config.margin = margin;
@@ -154,7 +167,7 @@ function updateCharts(timeFrame) {
   chartsConfig.forEach((config) => {
     const maxValue = d3.max(
       chartData,
-      (d) => d[`${timeFrame}_data`][config.metric]
+      (d) => d[timeFrameKeyMap[timeFrame]][config.metric]
     );
     config.y.domain([0, maxValue * 1.1]);
 
@@ -171,10 +184,14 @@ function updateCharts(timeFrame) {
         .merge(bars)
         .transition()
         .duration(500)
-        .attr("y", (d) => config.y(d[`${timeFrame}_data`][config.metric]))
+        .attr("y", (d) =>
+          config.y(d[timeFrameKeyMap[timeFrame]][config.metric])
+        )
         .attr(
           "height",
-          (d) => config.height - config.y(d[`${timeFrame}_data`][config.metric])
+          (d) =>
+            config.height -
+            config.y(d[timeFrameKeyMap[timeFrame]][config.metric])
         );
 
       // Para la gráfica principal de barras, agregar etiquetas de valor
@@ -194,16 +211,18 @@ function updateCharts(timeFrame) {
           .attr("x", (d) => config.x(d.name) + config.x.bandwidth() / 2)
           .attr(
             "y",
-            (d) => config.y(d[`${timeFrame}_data`][config.metric]) - 10
+            (d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]) - 10
           )
-          .text((d) => d[`${timeFrame}_data`][config.metric]);
+          .text((d) => d[timeFrameKeyMap[timeFrame]][config.metric]);
       }
     } else if (config.type === "pie") {
       // Limpiar ejes y labels
       config.g.selectAll(".x-axis, .y-axis").remove();
 
       const radius = Math.min(config.width, config.height) / 2;
-      const pie = d3.pie().value((d) => d[`${timeFrame}_data`][config.metric]);
+      const pie = d3
+        .pie()
+        .value((d) => d[timeFrameKeyMap[timeFrame]][config.metric]);
       const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
       // Calcular posición centrada horizontalmente
@@ -250,7 +269,9 @@ function updateCharts(timeFrame) {
         .append("text")
         .attr("x", 20)
         .attr("y", 12)
-        .text((d) => `${d.name}: ${d[`${timeFrame}_data`][config.metric]}`)
+        .text(
+          (d) => `${d.name}: ${d[timeFrameKeyMap[timeFrame]][config.metric]}`
+        )
         .style("fill", "#333")
         .style("font-size", "12px");
 
@@ -267,7 +288,7 @@ function updateCharts(timeFrame) {
       const line = d3
         .line()
         .x((d) => config.x(d.name) + config.x.bandwidth() / 2)
-        .y((d) => config.y(d[`${timeFrame}_data`][config.metric]));
+        .y((d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]));
 
       const linePath = config.g.selectAll(".line").data([chartData]);
 
@@ -296,13 +317,15 @@ function updateCharts(timeFrame) {
         .transition()
         .duration(500)
         .attr("cx", (d) => config.x(d.name) + config.x.bandwidth() / 2)
-        .attr("cy", (d) => config.y(d[`${timeFrame}_data`][config.metric]));
+        .attr("cy", (d) =>
+          config.y(d[timeFrameKeyMap[timeFrame]][config.metric])
+        );
     } else if (config.type === "area") {
       const area = d3
         .area()
         .x((d) => config.x(d.name) + config.x.bandwidth() / 2)
         .y0(config.height)
-        .y1((d) => config.y(d[`${timeFrame}_data`][config.metric]));
+        .y1((d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]));
 
       const areaPath = config.g.selectAll(".area").data([chartData]);
 
@@ -519,7 +542,7 @@ function initializeSecondaryChart(chartId) {
 function updateChart(config, timeFrame) {
   const maxValue = d3.max(
     chartData,
-    (d) => d[`${timeFrame}_data`][config.metric]
+    (d) => d[timeFrameKeyMap[timeFrame]][config.metric]
   );
   config.y.domain([0, maxValue * 1.1]);
 
@@ -536,10 +559,11 @@ function updateChart(config, timeFrame) {
       .merge(bars)
       .transition()
       .duration(500)
-      .attr("y", (d) => config.y(d[`${timeFrame}_data`][config.metric]))
+      .attr("y", (d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]))
       .attr(
         "height",
-        (d) => config.height - config.y(d[`${timeFrame}_data`][config.metric])
+        (d) =>
+          config.height - config.y(d[timeFrameKeyMap[timeFrame]][config.metric])
       );
 
     // Para la gráfica principal de barras, agregar etiquetas de valor
@@ -557,15 +581,20 @@ function updateChart(config, timeFrame) {
         .transition()
         .duration(500)
         .attr("x", (d) => config.x(d.name) + config.x.bandwidth() / 2)
-        .attr("y", (d) => config.y(d[`${timeFrame}_data`][config.metric]) - 10)
-        .text((d) => d[`${timeFrame}_data`][config.metric]);
+        .attr(
+          "y",
+          (d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]) - 10
+        )
+        .text((d) => d[timeFrameKeyMap[timeFrame]][config.metric]);
     }
   } else if (config.type === "pie") {
     // Limpiar ejes y labels
     config.g.selectAll(".x-axis, .y-axis").remove();
 
     const radius = Math.min(config.width, config.height) / 2;
-    const pie = d3.pie().value((d) => d[`${timeFrame}_data`][config.metric]);
+    const pie = d3
+      .pie()
+      .value((d) => d[timeFrameKeyMap[timeFrame]][config.metric]);
     const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
     // Calcular posición centrada horizontalmente
@@ -609,7 +638,7 @@ function updateChart(config, timeFrame) {
       .append("text")
       .attr("x", 20)
       .attr("y", 12)
-      .text((d) => `${d.name}: ${d[`${timeFrame}_data`][config.metric]}`)
+      .text((d) => `${d.name}: ${d[timeFrameKeyMap[timeFrame]][config.metric]}`)
       .style("fill", "#333")
       .style("font-size", "12px");
 
@@ -626,7 +655,7 @@ function updateChart(config, timeFrame) {
     const line = d3
       .line()
       .x((d) => config.x(d.name) + config.x.bandwidth() / 2)
-      .y((d) => config.y(d[`${timeFrame}_data`][config.metric]));
+      .y((d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]));
 
     const linePath = config.g.selectAll(".line").data([chartData]);
 
@@ -655,13 +684,15 @@ function updateChart(config, timeFrame) {
       .transition()
       .duration(500)
       .attr("cx", (d) => config.x(d.name) + config.x.bandwidth() / 2)
-      .attr("cy", (d) => config.y(d[`${timeFrame}_data`][config.metric]));
+      .attr("cy", (d) =>
+        config.y(d[timeFrameKeyMap[timeFrame]][config.metric])
+      );
   } else if (config.type === "area") {
     const area = d3
       .area()
       .x((d) => config.x(d.name) + config.x.bandwidth() / 2)
       .y0(config.height)
-      .y1((d) => config.y(d[`${timeFrame}_data`][config.metric]));
+      .y1((d) => config.y(d[timeFrameKeyMap[timeFrame]][config.metric]));
 
     const areaPath = config.g.selectAll(".area").data([chartData]);
 
@@ -738,6 +769,7 @@ function setupChartButtons() {
 d3.json("data/StationsInfo1.json")
   .then((data) => {
     chartData = data;
+    console.log("Ejemplo de datos:", chartData[0]);
 
     // Inicializar solo la gráfica principal
     initializeMainChartOnly();
