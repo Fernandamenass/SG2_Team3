@@ -149,7 +149,7 @@ function initializeCharts() {
       .style("text-anchor", "middle")
       .style("fill", "#d81b60") // Un rosa elegante
       .style("font-size", titleFontSize)
-      .style("font-family", "'Poppins', 'Helvetica Neue', sans-serif") // Adiós Comic Sans
+      .style("font-family", "'Poppins', 'Helvetica Neue', sans-serif")
       .style("font-weight", "600")
       .text(config.title);
 
@@ -426,7 +426,7 @@ function initializeMainChartOnly() {
       .style("text-anchor", "middle")
       .style("fill", "#ff69b4")
       .style("font-size", "24px")
-      .style("font-family", "'Comic Sans MS', cursive")
+      .style("font-family", "'Poppins', cursive")
       .text(mainChart.title);
 
     mainChart.margin = margin;
@@ -523,7 +523,7 @@ function initializeSecondaryChart(chartId) {
       .style("text-anchor", "middle")
       .style("fill", "#ff69b4")
       .style("font-size", "18px")
-      .style("font-family", "'Comic Sans MS', cursive")
+      .style("font-family", "'Poppins', cursive")
       .text(config.title);
 
     config.margin = margin;

@@ -1,86 +1,189 @@
-#chart-area svg {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-#logo {
-  height: 50px;
-}
-
-.navbar-brand {
-  height: 60px;
-  padding: 5px 0px;
-}
-
 body {
-  background-color: black;
-  color: white;
-}
-
-.btn-outline-light {
-  transition: all 0.3s;
-  z-index: 1000;
-}
-
-.btn-outline-light:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.chart-container {
-  background: #2e2e2e;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.btn-outline-light {
-  border-color: #00bcd4;
-  color: #00bcd4;
-}
-
-.btn-outline-light:hover {
-  background: #00bcd4;
-  color: #1e1e1e;
-}
-
-.chart-container {
-  background: #2e2e2e;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  background-color: #fff5f9;
+  color: #5a3d4d;
+  font-family: "Poppins", sans-serif;
 }
 
 .btn-outline-primary {
-  border-color: #00bcd4;
-  color: #00bcd4;
+  border-color: #ff69b4;
+  color: #ff69b4;
+  margin: 20px;
 }
 
 .btn-outline-primary:hover {
-  background: #00bcd4;
-  color: #1e1e1e;
+  background: #ff69b4;
+  color: white;
+}
+
+.chart-container {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(255, 105, 180, 0.1);
+  border: 1px solid #ffe5f0;
 }
 
 #timeframe-label {
-  color: #00bcd4;
-  font-weight: bold;
+  color: #d81b60;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.chart-btn {
+  border-radius: 8px;
+  font-weight: 500;
+  margin: 7px;
+  transition: all 0.3s;
+}
+
+.chart-btn.active {
+  background: linear-gradient(135deg, #ff69b4, #ff94c2);
+  color: white;
+  box-shadow: 0 2px 4px rgba(216, 27, 96, 0.2);
+  background-color: #ff69b4;
+  border-color: #ff69b4;
 }
 
 .y-axis text {
-  fill: #fff !important; /* Forzar a blanco */
+  fill: #d81b60 !important;
+  font-weight: 500;
 }
 
-.btn-pink {
-  background-color: #ff69b4;
-  color: white;
-  border-color: #ff69b4;
+.x-axis text {
+  fill: #ff69b4 !important;
+  font-weight: 500;
 }
 
-.btn-outline-pink {
+.chart-title {
+  fill: #d81b60 !important;
+  font-weight: 600 !important;
+}
+
+.main-chart-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(255, 105, 180, 0.15);
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.small-chart-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 12px rgba(255, 105, 180, 0.1);
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+#chart-placeholder {
+  border-color: #ffd9eb;
   color: #ff69b4;
-  border-color: #ff69b4;
+  height: 100%;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
 }
 
-.text-pink {
-  color: #ff69b4 !important;
+.chart-view {
+  height: 100%;
+  width: 100%;
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.text-success {
+  color: #27ae60 !important;
+}
+
+.text-danger {
+  color: #e74c3c !important;
+}
+
+.kpi-card {
+  transition: transform 0.3s ease;
+  background: #ffe6f2;
+  border: 2px solid #ff99cc;
+  border-radius: 20px;
+  margin: 10px 0;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1.5rem;
+}
+
+.kpi-card:hover {
+  transform: translateY(-5px);
+}
+
+.kpi-icon {
+  margin: 15px;
+  font-size: 2rem;
+  color: #ff6699;
+}
+
+.kpi-value {
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #ff0066;
+  margin: 10px 0;
+  font-size: 2.5rem;
+  line-height: 1;
+  width: 100%;
+  text-align: center;
+}
+
+.kpi-title {
+  color: #666;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-trend {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .kpi-card {
+    margin: 8px 0;
+  }
+
+  .kpi-icon {
+    font-size: 1.5rem;
+  }
+
+  .kpi-value {
+    font-size: 1.8rem;
+  }
 }
