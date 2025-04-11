@@ -24,8 +24,8 @@ const chartsConfig = [
   {
     container: "#chart-production",
     metric: "production",
-    title: "Producción",
-    yLabel: "unidades",
+    title: "Production",
+    yLabel: "units",
     color: "#ffb6c1",
     type: "bar",
     isMainChart: true, // Marcar como gráfica principal
@@ -33,8 +33,8 @@ const chartsConfig = [
   {
     container: "#chart-rejected",
     metric: "rejected_units",
-    title: "Unidades Rechazadas",
-    yLabel: "unidades",
+    title: "Rejected Units",
+    yLabel: "units",
     color: "#ff94c2",
     type: "pie",
     isMainChart: false,
@@ -42,8 +42,8 @@ const chartsConfig = [
   {
     container: "#chart-delay",
     metric: "avg_delay_minutes",
-    title: "Retraso Promedio",
-    yLabel: "minutos",
+    title: "Average Delay",
+    yLabel: "minutes",
     color: "#ffc3a0",
     type: "bar",
     isMainChart: false,
@@ -51,8 +51,8 @@ const chartsConfig = [
   {
     container: "#chart-accidents",
     metric: "accidents",
-    title: "Accidentes",
-    yLabel: "incidentes",
+    title: "Accidents",
+    yLabel: "incidents",
     color: "#add8e6",
     type: "line",
     isMainChart: false,
@@ -60,8 +60,8 @@ const chartsConfig = [
   {
     container: "#chart-occupancy",
     metric: "occupancy_hours",
-    title: "Horas de Ocupación",
-    yLabel: "horas",
+    title: "Occupancy Hours",
+    yLabel: "hours",
     color: "#c3b1e1",
     type: "area",
     isMainChart: false,
@@ -69,7 +69,7 @@ const chartsConfig = [
   {
     container: "#chart-rejection-percentage",
     metric: "rejection_percentage",
-    title: "% de Rechazo",
+    title: "Rejection Percentage",
     yLabel: "%",
     color: "#f0e68c",
     type: "pie",
@@ -97,7 +97,7 @@ function initializeCharts() {
       .attr("height", "100%")
       .style("background", "#fffafc");
 
-    // Viewport para hacer SVG responsive
+    // Hacer SVG responsive
     svg.attr(
       "viewBox",
       `0 0 ${width + margin.left + margin.right} ${
@@ -138,16 +138,16 @@ function initializeCharts() {
       .selectAll(".tick text")
       .style("fill", "#ff69b4");
 
-    // Tamaño de fuente mayor para la gráfica principal
+    // Tamaño de fuente mayor para la principal
     const titleFontSize = config.isMainChart ? "24px" : "16px";
 
     // Título de gráfica
     g.append("text")
       .attr("class", "chart-title")
       .attr("x", width / 2)
-      .attr("y", config.isMainChart ? -40 : -25) // Subimos un poco más el texto para dar espacio
+      .attr("y", config.isMainChart ? -40 : -25)
       .style("text-anchor", "middle")
-      .style("fill", "#d81b60") // Un rosa elegante
+      .style("fill", "#d81b60")
       .style("font-size", titleFontSize)
       .style("font-family", "'Poppins', 'Helvetica Neue', sans-serif")
       .style("font-weight", "600")
@@ -194,7 +194,7 @@ function updateCharts(timeFrame) {
             config.y(d[timeFrameKeyMap[timeFrame]][config.metric])
         );
 
-      // Para la gráfica principal de barras, agregar etiquetas de valor
+      // Etiquetas de valor para la gráfica principal
       if (config.isMainChart) {
         const valueLabels = config.g.selectAll(".value-label").data(chartData);
 
@@ -225,8 +225,7 @@ function updateCharts(timeFrame) {
         .value((d) => d[timeFrameKeyMap[timeFrame]][config.metric]);
       const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
-      // Calcular posición centrada horizontalmente
-      const totalWidth = radius * 2 + 200; // 200 para la leyenda
+      const totalWidth = radius * 2 + 200;
       const offsetX = (config.width - totalWidth) / 2;
 
       // Posicionar gráfica a la izquierda

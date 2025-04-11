@@ -1,248 +1,247 @@
 [
-	{
-	  "workstation_id": "WS-111",
-	  "name": "Station A",
-	  "daily_data": {
-		"production": 1800,
-		"occupancy_hours": 16,
-		"avg_production_time_min": 12,
-		"rejected_units": 30,
-		"rejection_percentage": 1.7,
-		"avg_delay_minutes": 5,
-		"accidents": 0
-	  },
-	  "weekly_data": {
-		"production": 12600,
-		"occupancy_hours": 112,
-		"avg_production_time_min": 12,
-		"rejected_units": 210,
-		"rejection_percentage": 1.7,
-		"avg_delay_minutes": 6,
-		"accidents": 1
-	  },
-	  "monthly_data": {
-		"production": 50400,
-		"occupancy_hours": 480,
-		"avg_production_time_min": 11,
-		"rejected_units": 840,
-		"rejection_percentage": 1.7,
-		"avg_delay_minutes": 7,
-		"accidents": 3
-	  },
-	  "quarterly_data": {
-		"production": 151200,
-		"occupancy_hours": 1440,
-		"avg_production_time_min": 11,
-		"rejected_units": 2520,
-		"rejection_percentage": 1.7,
-		"avg_delay_minutes": 7,
-		"accidents": 9
-	  },
-	  "yearly_data": {
-		"production": 604800,
-		"occupancy_hours": 5760,
-		"avg_production_time_min": 11,
-		"rejected_units": 10080,
-		"rejection_percentage": 1.7,
-		"avg_delay_minutes": 7,
-		"accidents": 36
-	  }
-	},
-	{
-	  "workstation_id": "WS-222",
-	  "name": "Station B",
-	  "daily_data": {
-		"production": 950,
-		"occupancy_hours": 10,
-		"avg_production_time_min": 18,
-		"rejected_units": 25,
-		"rejection_percentage": 2.6,
-		"avg_delay_minutes": 12,
-		"accidents": 1
-	  },
-	  "weekly_data": {
-		"production": 6650,
-		"occupancy_hours": 70,
-		"avg_production_time_min": 18,
-		"rejected_units": 175,
-		"rejection_percentage": 2.6,
-		"avg_delay_minutes": 10,
-		"accidents": 2
-	  },
-	  "monthly_data": {
-		"production": 28500,
-		"occupancy_hours": 300,
-		"avg_production_time_min": 17,
-		"rejected_units": 750,
-		"rejection_percentage": 2.6,
-		"avg_delay_minutes": 9,
-		"accidents": 6
-	  },
-	  "quarterly_data": {
-		"production": 85500,
-		"occupancy_hours": 900,
-		"avg_production_time_min": 17,
-		"rejected_units": 2250,
-		"rejection_percentage": 2.6,
-		"avg_delay_minutes": 9,
-		"accidents": 18
-	  },
-	  "yearly_data": {
-		"production": 342000,
-		"occupancy_hours": 3600,
-		"avg_production_time_min": 17,
-		"rejected_units": 9000,
-		"rejection_percentage": 2.6,
-		"avg_delay_minutes": 9,
-		"accidents": 72
-	  }
-	},
-	{
-	  "workstation_id": "WS-333",
-	  "name": "Station C",
-	  "daily_data": {
-		"production": 2100,
-		"occupancy_hours": 20,
-		"avg_production_time_min": 9,
-		"rejected_units": 10,
-		"rejection_percentage": 0.5,
-		"avg_delay_minutes": 2,
-		"accidents": 0
-	  },
-	  "weekly_data": {
-		"production": 14700,
-		"occupancy_hours": 140,
-		"avg_production_time_min": 9,
-		"rejected_units": 70,
-		"rejection_percentage": 0.5,
-		"avg_delay_minutes": 3,
-		"accidents": 0
-	  },
-	  "monthly_data": {
-		"production": 58800,
-		"occupancy_hours": 600,
-		"avg_production_time_min": 8,
-		"rejected_units": 280,
-		"rejection_percentage": 0.5,
-		"avg_delay_minutes": 2,
-		"accidents": 1
-	  },
-	  "quarterly_data": {
-		"production": 176400,
-		"occupancy_hours": 1800,
-		"avg_production_time_min": 8,
-		"rejected_units": 840,
-		"rejection_percentage": 0.5,
-		"avg_delay_minutes": 2,
-		"accidents": 3
-	  },
-	  "yearly_data": {
-		"production": 705600,
-		"occupancy_hours": 7200,
-		"avg_production_time_min": 8,
-		"rejected_units": 3360,
-		"rejection_percentage": 0.5,
-		"avg_delay_minutes": 2,
-		"accidents": 12
-	  }
-	},
-	{
-	  "workstation_id": "WS-444",
-	  "name": "Station D",
-	  "daily_data": {
-		"production": 1300,
-		"occupancy_hours": 14,
-		"avg_production_time_min": 20,
-		"rejected_units": 35,
-		"rejection_percentage": 2.7,
-		"avg_delay_minutes": 6,
-		"accidents": 1
-	  },
-	  "weekly_data": {
-		"production": 9100,
-		"occupancy_hours": 98,
-		"avg_production_time_min": 20,
-		"rejected_units": 245,
-		"rejection_percentage": 2.7,
-		"avg_delay_minutes": 5,
-		"accidents": 2
-	  },
-	  "monthly_data": {
-		"production": 39000,
-		"occupancy_hours": 420,
-		"avg_production_time_min": 19,
-		"rejected_units": 1050,
-		"rejection_percentage": 2.7,
-		"avg_delay_minutes": 6,
-		"accidents": 5
-	  },
-	  "quarterly_data": {
-		"production": 117000,
-		"occupancy_hours": 1260,
-		"avg_production_time_min": 19,
-		"rejected_units": 3150,
-		"rejection_percentage": 2.7,
-		"avg_delay_minutes": 6,
-		"accidents": 15
-	  },
-	  "yearly_data": {
-		"production": 468000,
-		"occupancy_hours": 5040,
-		"avg_production_time_min": 19,
-		"rejected_units": 12600,
-		"rejection_percentage": 2.7,
-		"avg_delay_minutes": 6,
-		"accidents": 60
-	  }
-	},
-	{
-	  "workstation_id": "WS-555",
-	  "name": "Station E",
-	  "daily_data": {
-		"production": 1650,
-		"occupancy_hours": 15,
-		"avg_production_time_min": 14,
-		"rejected_units": 18,
-		"rejection_percentage": 1.1,
-		"avg_delay_minutes": 4,
-		"accidents": 0
-	  },
-	  "weekly_data": {
-		"production": 11550,
-		"occupancy_hours": 105,
-		"avg_production_time_min": 14,
-		"rejected_units": 126,
-		"rejection_percentage": 1.1,
-		"avg_delay_minutes": 3,
-		"accidents": 1
-	  },
-	  "monthly_data": {
-		"production": 46200,
-		"occupancy_hours": 420,
-		"avg_production_time_min": 13,
-		"rejected_units": 504,
-		"rejection_percentage": 1.1,
-		"avg_delay_minutes": 3,
-		"accidents": 2
-	  },
-	  "quarterly_data": {
-		"production": 138600,
-		"occupancy_hours": 1260,
-		"avg_production_time_min": 13,
-		"rejected_units": 1512,
-		"rejection_percentage": 1.1,
-		"avg_delay_minutes": 3,
-		"accidents": 6
-	  },
-	  "yearly_data": {
-		"production": 554400,
-		"occupancy_hours": 5040,
-		"avg_production_time_min": 13,
-		"rejected_units": 6048,
-		"rejection_percentage": 1.1,
-		"avg_delay_minutes": 3,
-		"accidents": 24
-	  }
-	}
-  ]
-  
+  {
+    "workstation_id": "WS-111",
+    "name": "Station A",
+    "daily_data": {
+      "production": 1800,
+      "occupancy_hours": 16,
+      "avg_production_time_min": 12,
+      "rejected_units": 30,
+      "rejection_percentage": 1.7,
+      "avg_delay_minutes": 5,
+      "accidents": 0
+    },
+    "weekly_data": {
+      "production": 12600,
+      "occupancy_hours": 112,
+      "avg_production_time_min": 12,
+      "rejected_units": 210,
+      "rejection_percentage": 1.7,
+      "avg_delay_minutes": 6,
+      "accidents": 1
+    },
+    "monthly_data": {
+      "production": 50400,
+      "occupancy_hours": 480,
+      "avg_production_time_min": 11,
+      "rejected_units": 840,
+      "rejection_percentage": 1.7,
+      "avg_delay_minutes": 7,
+      "accidents": 3
+    },
+    "quarterly_data": {
+      "production": 151200,
+      "occupancy_hours": 1440,
+      "avg_production_time_min": 11,
+      "rejected_units": 2520,
+      "rejection_percentage": 1.7,
+      "avg_delay_minutes": 7,
+      "accidents": 9
+    },
+    "yearly_data": {
+      "production": 604800,
+      "occupancy_hours": 5760,
+      "avg_production_time_min": 11,
+      "rejected_units": 10080,
+      "rejection_percentage": 1.7,
+      "avg_delay_minutes": 7,
+      "accidents": 36
+    }
+  },
+  {
+    "workstation_id": "WS-222",
+    "name": "Station B",
+    "daily_data": {
+      "production": 950,
+      "occupancy_hours": 10,
+      "avg_production_time_min": 18,
+      "rejected_units": 25,
+      "rejection_percentage": 2.6,
+      "avg_delay_minutes": 12,
+      "accidents": 1
+    },
+    "weekly_data": {
+      "production": 6650,
+      "occupancy_hours": 70,
+      "avg_production_time_min": 18,
+      "rejected_units": 175,
+      "rejection_percentage": 2.6,
+      "avg_delay_minutes": 10,
+      "accidents": 2
+    },
+    "monthly_data": {
+      "production": 28500,
+      "occupancy_hours": 300,
+      "avg_production_time_min": 17,
+      "rejected_units": 750,
+      "rejection_percentage": 2.6,
+      "avg_delay_minutes": 9,
+      "accidents": 6
+    },
+    "quarterly_data": {
+      "production": 85500,
+      "occupancy_hours": 900,
+      "avg_production_time_min": 17,
+      "rejected_units": 2250,
+      "rejection_percentage": 2.6,
+      "avg_delay_minutes": 9,
+      "accidents": 18
+    },
+    "yearly_data": {
+      "production": 342000,
+      "occupancy_hours": 3600,
+      "avg_production_time_min": 17,
+      "rejected_units": 9000,
+      "rejection_percentage": 2.6,
+      "avg_delay_minutes": 9,
+      "accidents": 72
+    }
+  },
+  {
+    "workstation_id": "WS-333",
+    "name": "Station C",
+    "daily_data": {
+      "production": 2100,
+      "occupancy_hours": 20,
+      "avg_production_time_min": 9,
+      "rejected_units": 10,
+      "rejection_percentage": 0.5,
+      "avg_delay_minutes": 2,
+      "accidents": 0
+    },
+    "weekly_data": {
+      "production": 14700,
+      "occupancy_hours": 140,
+      "avg_production_time_min": 9,
+      "rejected_units": 70,
+      "rejection_percentage": 0.5,
+      "avg_delay_minutes": 3,
+      "accidents": 0
+    },
+    "monthly_data": {
+      "production": 58800,
+      "occupancy_hours": 600,
+      "avg_production_time_min": 8,
+      "rejected_units": 280,
+      "rejection_percentage": 0.5,
+      "avg_delay_minutes": 2,
+      "accidents": 1
+    },
+    "quarterly_data": {
+      "production": 176400,
+      "occupancy_hours": 1800,
+      "avg_production_time_min": 8,
+      "rejected_units": 840,
+      "rejection_percentage": 0.5,
+      "avg_delay_minutes": 2,
+      "accidents": 3
+    },
+    "yearly_data": {
+      "production": 705600,
+      "occupancy_hours": 7200,
+      "avg_production_time_min": 8,
+      "rejected_units": 3360,
+      "rejection_percentage": 0.5,
+      "avg_delay_minutes": 2,
+      "accidents": 12
+    }
+  },
+  {
+    "workstation_id": "WS-444",
+    "name": "Station D",
+    "daily_data": {
+      "production": 1300,
+      "occupancy_hours": 14,
+      "avg_production_time_min": 20,
+      "rejected_units": 35,
+      "rejection_percentage": 2.7,
+      "avg_delay_minutes": 6,
+      "accidents": 1
+    },
+    "weekly_data": {
+      "production": 9100,
+      "occupancy_hours": 98,
+      "avg_production_time_min": 20,
+      "rejected_units": 245,
+      "rejection_percentage": 2.7,
+      "avg_delay_minutes": 5,
+      "accidents": 2
+    },
+    "monthly_data": {
+      "production": 39000,
+      "occupancy_hours": 420,
+      "avg_production_time_min": 19,
+      "rejected_units": 1050,
+      "rejection_percentage": 2.7,
+      "avg_delay_minutes": 6,
+      "accidents": 5
+    },
+    "quarterly_data": {
+      "production": 117000,
+      "occupancy_hours": 1260,
+      "avg_production_time_min": 19,
+      "rejected_units": 3150,
+      "rejection_percentage": 2.7,
+      "avg_delay_minutes": 6,
+      "accidents": 15
+    },
+    "yearly_data": {
+      "production": 468000,
+      "occupancy_hours": 5040,
+      "avg_production_time_min": 19,
+      "rejected_units": 12600,
+      "rejection_percentage": 2.7,
+      "avg_delay_minutes": 6,
+      "accidents": 60
+    }
+  },
+  {
+    "workstation_id": "WS-555",
+    "name": "Station E",
+    "daily_data": {
+      "production": 1650,
+      "occupancy_hours": 15,
+      "avg_production_time_min": 14,
+      "rejected_units": 18,
+      "rejection_percentage": 1.1,
+      "avg_delay_minutes": 4,
+      "accidents": 0
+    },
+    "weekly_data": {
+      "production": 11550,
+      "occupancy_hours": 105,
+      "avg_production_time_min": 14,
+      "rejected_units": 126,
+      "rejection_percentage": 1.1,
+      "avg_delay_minutes": 3,
+      "accidents": 1
+    },
+    "monthly_data": {
+      "production": 46200,
+      "occupancy_hours": 420,
+      "avg_production_time_min": 13,
+      "rejected_units": 504,
+      "rejection_percentage": 1.1,
+      "avg_delay_minutes": 3,
+      "accidents": 2
+    },
+    "quarterly_data": {
+      "production": 138600,
+      "occupancy_hours": 1260,
+      "avg_production_time_min": 13,
+      "rejected_units": 1512,
+      "rejection_percentage": 1.1,
+      "avg_delay_minutes": 3,
+      "accidents": 6
+    },
+    "yearly_data": {
+      "production": 554400,
+      "occupancy_hours": 5040,
+      "avg_production_time_min": 13,
+      "rejected_units": 6048,
+      "rejection_percentage": 1.1,
+      "avg_delay_minutes": 3,
+      "accidents": 24
+    }
+  }
+]
