@@ -16,160 +16,180 @@
   </head>
 
   <body>
-    <!-- Bootstrap grid setup -->
     <div class="container">
       <div class="row">
+        <!-- Columna principal -->
         <div class="col-lg-8">
-        <h1 class="text-center mb-4">Production Dashboard</h1>
+          <h1 class="text-center mb-4">Production Dashboard</h1>
 
-        <!-- Controles de tiempo -->
-        <div class="row position-relative mb-4">
-          <div class="col-12 text-center">
-            <button id="prev-btn" class="btn btn-outline-primary">
-              <i class="bi bi-chevron-left"></i>
-            </button>
-            <span id="timeframe-label" class="mx-3">Daily</span>
-            <button id="next-btn" class="btn btn-outline-primary">
-              <i class="bi bi-chevron-right"></i>
-            </button>
+          <!-- Controles de tiempo -->
+          <div class="row position-relative mb-4">
+            <div class="col-12 text-center">
+              <button id="prev-btn" class="btn btn-outline-primary">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <span id="timeframe-label" class="mx-3">Daily</span>
+              <button id="next-btn" class="btn btn-outline-primary">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <!-- Gráfica principal de producción -->
-        <div class="row mb-4">
-          <div class="col-12 main-chart-container" id="chart-production"></div>
-        </div>
+          <!-- KPI Cards -->
+          <div class="row mb-4">
+            <div class="col-md-3 mb-3 mb-md-0">
+              <div class="card h-100 kpi-card">
+                <div class="card-body">
+                  <h5 class="kpi-title">Total Production</h5>
+                  <div class="d-flex align-items-center">
+                    <h2 id="kpi-production" class="kpi-value text-success">
+                      0
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+              <div class="card h-100 kpi-card">
+                <div class="card-body">
+                  <h5 class="kpi-title">Rejection Rate</h5>
+                  <div class="d-flex align-items-center">
+                    <h2 id="kpi-rejection" class="kpi-value text-danger">0%</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+              <div class="card h-100 kpi-card">
+                <div class="card-body">
+                  <h5 class="kpi-title">Avg. Occupancy</h5>
+                  <div class="d-flex align-items-center">
+                    <h2 id="kpi-occupancy" class="kpi-value text-primary">
+                      0%
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card h-100 kpi-card">
+                <div class="card-body">
+                  <h5 class="kpi-title">Accidents</h5>
+                  <div class="d-flex align-items-center">
+                    <h2 id="kpi-accidents" class="kpi-value text-warning">0</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <!-- Botones para gráficas secundarias -->
-        <div class="row mb-4">
-          <div class="col-12 text-center">
+          <!-- Gráfica principal -->
+          <div class="row mb-4">
             <div
-              class="btn-group"
-              role="group"
-              aria-label="Gráficas secundarias"
+              class="col-12 main-chart-container"
+              id="chart-production"
+            ></div>
+          </div>
+
+          <!-- Botones para gráficas secundarias -->
+          <div class="row mb-4">
+            <div class="col-12 text-center">
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Gráficas secundarias"
+              >
+                <button
+                  id="btn-delay"
+                  class="btn btn-outline-primary chart-btn"
+                  data-chart="delay"
+                >
+                  Delay
+                </button>
+                <button
+                  id="btn-accidents"
+                  class="btn btn-outline-primary chart-btn"
+                  data-chart="accidents"
+                >
+                  Accidents
+                </button>
+                <button
+                  id="btn-rejected"
+                  class="btn btn-outline-primary chart-btn"
+                  data-chart="rejected"
+                >
+                  Rejections
+                </button>
+                <button
+                  id="btn-occupancy"
+                  class="btn btn-outline-primary chart-btn"
+                  data-chart="occupancy"
+                >
+                  Occupation
+                </button>
+                <button
+                  id="btn-rejection-percentage"
+                  class="btn btn-outline-primary chart-btn"
+                  data-chart="rejection-percentage"
+                >
+                  Rejection %
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráficas secundarias -->
+          <div class="row">
+            <div
+              class="col-12 small-chart-container"
+              id="secondary-chart-container"
             >
-              <button
-                id="btn-delay"
-                class="btn btn-outline-primary chart-btn"
-                data-chart="delay"
+              <div
+                id="chart-delay"
+                class="chart-view"
+                style="display: none"
+              ></div>
+              <div
+                id="chart-accidents"
+                class="chart-view"
+                style="display: none"
+              ></div>
+              <div
+                id="chart-rejected"
+                class="chart-view"
+                style="display: none"
+              ></div>
+              <div
+                id="chart-occupancy"
+                class="chart-view"
+                style="display: none"
+              ></div>
+              <div
+                id="chart-rejection-percentage"
+                class="chart-view"
+                style="display: none"
+              ></div>
+              <div
+                id="chart-placeholder"
+                class="d-flex justify-content-center align-items-center h-100"
               >
-                Delay
-              </button>
-              <button
-                id="btn-accidents"
-                class="btn btn-outline-primary chart-btn"
-                data-chart="accidents"
-              >
-                Accidents
-              </button>
-              <button
-                id="btn-rejected"
-                class="btn btn-outline-primary chart-btn"
-                data-chart="rejected"
-              >
-                Rejections
-              </button>
-              <button
-                id="btn-occupancy"
-                class="btn btn-outline-primary chart-btn"
-                data-chart="occupancy"
-              >
-                Occupation
-              </button>
-              <button
-                id="btn-rejection-percentage"
-                class="btn btn-outline-primary chart-btn"
-                data-chart="rejection-percentage"
-              >
-                Rejection % 
-              </button>
+                <p class="text-center text-muted">
+                  Select a button to view the corresponding graph
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="row">
-          <div
-            class="col-12 small-chart-container"
-            id="secondary-chart-container"
-          >
-            <div
-              id="chart-delay"
-              class="chart-view"
-              style="display: none"
-            ></div>
-            <div
-              id="chart-accidents"
-              class="chart-view"
-              style="display: none"
-            ></div>
-            <div
-              id="chart-rejected"
-              class="chart-view"
-              style="display: none"
-            ></div>
-            <div
-              id="chart-occupancy"
-              class="chart-view"
-              style="display: none"
-            ></div>
-            <div
-              id="chart-rejection-percentage"
-              class="chart-view"
-              style="display: none"
-            ></div>
-            <div
-              id="chart-placeholder"
-              class="d-flex justify-content-center align-items-center h-100"
-            >
-              <p class="text-center text-muted">
-                Select a button to view the corresponding graph
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="row g-3">
-          <div class="col-12 col-sm-6 col-lg-12">
-            <div class="card h-100 kpi-card">
-              <div class="card-body">
-                <h5 class="kpi-title">Daily Units</h5>
-                <div class="d-flex align-items-center">
-                  <h2 class="kpi-value">1163</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-12 col-sm-6 col-lg-12">
-            <div class="card h-100 kpi-card">
-              <div class="card-body">
-                <h5 class="kpi-title">Rejection rate</h5>
-                <div class="d-flex align-items-center">
-                  <h2 class="kpi-value">6.5%</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-12 col-sm-6 col-lg-12">
-            <div class="card h-100 kpi-card">
-              <div class="card-body">
-                <h5 class="kpi-title">Products on hold</h5>
-                <div class="d-flex align-items-center">
-                  <h2 class="kpi-value">91.8%</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-12 col-sm-6 col-lg-12">
-            <div class="card h-100 kpi-card">
-              <div class="card-body">
-                <h5 class="kpi-title">Bottleneck</h5>
-                <div class="d-flex align-items-center">
-                  <h2 class="kpi-value">Station E</h2>
-                </div>
+        <!-- Columna lateral de Insights -->
+        <div class="col-lg-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Insights & Analysis</h5>
+              <div id="insights-panel">
+                <p class="text-muted">
+                  Aquí aparecerán los análisis basados en los datos mostrados.
+                </p>
               </div>
             </div>
           </div>
@@ -177,9 +197,8 @@
       </div>
     </div>
 
-    <!-- External JS libraries -->
+    <!-- Scripts -->
     <script src="js/d3.min.js"></script>
-    <!-- Custom JS -->
     <script src="js/main.js"></script>
   </body>
 </html>

@@ -28,7 +28,6 @@ const plantTimeFrameKeyMap = {
 };
 
 let currentTimeFrameIndex = 0;
-let currentProductQualityFilter = "all";
 
 // Configuración de cada gráfica con nuevos tipos
 const chartsConfig = [
@@ -122,38 +121,39 @@ function updateKPICards() {
   const timeFrame = timeFrames[currentTimeFrameIndex];
   const summaryKey = plantTimeFrameKeyMap[timeFrame];
 
-  if (plantData && plantData[summaryKey]) {
-    const summary = plantData[summaryKey];
-
-    // Update KPI cards
-    document.getElementById("kpi-production").textContent =
-      summary.total_production;
-    document.getElementById("kpi-rejection").textContent =
-      (summary.rejection_rate * 100).toFixed(1) + "%";
-
-    // Calculate average occupancy
-    const stationMetrics = summary.station_metrics;
-    let avgOccupancy = 0;
-    let stationCount = 0;
-
-    for (const stationId in stationMetrics) {
-      avgOccupancy += stationMetrics[stationId].avg_occupancy;
-      stationCount++;
-    }
-
-    if (stationCount > 0) avgOccupancy = avgOccupancy / stationCount;
-    document.getElementById("kpi-occupancy").textContent =
-      (avgOccupancy * 100).toFixed(1) + "%";
-
-    // Calculate total accidents
-    let totalAccidents = 0;
-    if (chartData) {
-      for (const station of chartData) {
-        totalAccidents += station[timeFrameKeyMap[timeFrame]].accidents || 0;
-      }
-    }
-    document.getElementById("kpi-accidents").textContent = totalAccidents;
+  if (!plantData || !plantData[summaryKey]) {
+    console.error("Datos de planta no disponibles");
+    return;
   }
+
+  const summary = plantData[summaryKey];
+
+  // 1. Total Production
+  document.getElementById("kpi-production").textContent =
+    summary.total_production?.toLocaleString() || "0";
+
+  // 2. Rejection Rate
+  const rejectionRate = (summary.rejection_rate * 100 || 0).toFixed(1);
+  document.getElementById("kpi-rejection").textContent = `${rejectionRate}%`;
+
+  // 3. Avg Occupancy
+  const stationMetrics = Object.values(summary.station_metrics || {});
+  const avgOccupancy =
+    stationMetrics.length > 0
+      ? stationMetrics.reduce((acc, curr) => acc + curr.avg_occupancy, 0) /
+        stationMetrics.length
+      : 0;
+  document.getElementById("kpi-occupancy").textContent = `${(
+    avgOccupancy * 100
+  ).toFixed(1)}%`;
+
+  // 4. Total Accidents (desde StationsInfo.json)
+  const totalAccidents =
+    chartData?.reduce((acc, station) => {
+      const timeData = station[timeFrameKeyMap[timeFrame]];
+      return acc + (timeData?.accidents || 0);
+    }, 0) || 0;
+  document.getElementById("kpi-accidents").textContent = totalAccidents;
 }
 
 function showDataInsights() {
@@ -162,60 +162,64 @@ function showDataInsights() {
   const insightsPanel = document.getElementById("insights-panel");
 
   let insightsHTML =
-    '<h3 class="text-xl font-semibold mb-3">Key Insights</h3><ul class="space-y-2">';
+    '<h3 class="text-xl font-semibold mb-3">Análisis clave</h3><ul class="space-y-2">';
 
   if (plantData && plantData[summaryKey]) {
     const summary = plantData[summaryKey];
-    const rejectionRate = summary.rejection_rate * 100;
 
-    // Production insight
-    insightsHTML += `<li class="flex items-start">
-      <span class="text-green-500 mr-2">✓</span>
-      Total production: ${summary.total_production} units
-    </li>`;
-
-    // Rejection rate insight
-    insightsHTML +=
-      rejectionRate > 5
-        ? `<li class="flex items-start">
-        <span class="text-red-500 mr-2">⚠</span>
-        High rejection rate: ${rejectionRate.toFixed(1)}%
-      </li>`
-        : `<li class="flex items-start">
-        <span class="text-green-500 mr-2">✓</span>
-        Rejection rate: ${rejectionRate.toFixed(1)}%
+    // Producción total
+    insightsHTML += `
+      <li class="flex items-start">
+        <i class="bi bi-box-seam text-primary mr-2"></i>
+        Producción total: <strong>${summary.total_production.toLocaleString()} unidades</strong>
       </li>`;
 
-    // Bottleneck insight
-    const stationMetrics = summary.station_metrics;
-    let maxBottleneck = 0;
-    let bottleneckStation = "";
-
-    for (const stationId in stationMetrics) {
-      const delay = stationMetrics[stationId].avg_bottleneck_delay || 0;
-      if (delay > maxBottleneck) {
-        maxBottleneck = delay;
-        bottleneckStation = `Station ${String.fromCharCode(
-          65 + parseInt(stationId)
-        )}`;
-      }
-    }
-
-    if (maxBottleneck > 0) {
-      insightsHTML += `<li class="flex items-start">
-        <span class="text-yellow-500 mr-2">⚠</span>
-        Bottleneck at ${bottleneckStation}: ${maxBottleneck.toFixed(2)} mins
+    // Tasa de rechazo
+    const rejectionRate = (summary.rejection_rate * 100).toFixed(1);
+    insightsHTML += `
+      <li class="flex items-start">
+        <i class="bi bi-x-circle ${
+          rejectionRate > 5 ? "text-danger" : "text-success"
+        } mr-2"></i>
+        Tasa de rechazo: <strong>${rejectionRate}%</strong>
+        ${rejectionRate > 5 ? "(Meta: <5%)" : "(Dentro del objetivo)"}
       </li>`;
+
+    // Cuello de botella
+    const bottleneck = Object.entries(summary.station_metrics).reduce(
+      (acc, [id, metrics]) => {
+        const delay = metrics.avg_bottleneck_delay;
+        return delay > acc.delay
+          ? {
+              delay,
+              station: `Estación ${String.fromCharCode(65 + parseInt(id))}`,
+            }
+          : acc;
+      },
+      { delay: 0, station: "" }
+    );
+
+    if (bottleneck.delay > 0) {
+      insightsHTML += `
+        <li class="flex items-start">
+          <i class="bi bi-hourglass-split text-warning mr-2"></i>
+          Mayor cuello de botella: 
+          <strong>${bottleneck.station} (${bottleneck.delay.toFixed(
+        1
+      )} mins)</strong>
+        </li>`;
     }
   }
 
   insightsHTML += `</ul>
-    <div class="mt-6 bg-blue-50 p-4 rounded">
-      <h3 class="text-lg font-semibold mb-2">Recommendations</h3>
-      <ul class="list-disc pl-5 space-y-1">
-        <li>Optimize workflow at bottleneck stations</li>
-        <li>Review quality control processes</li>
-        <li>Balance station workloads</li>
+    <div class="mt-4 bg-light p-3 rounded">
+      <h4 class="font-semibold mb-2"><i class="bi bi-lightbulb text-primary mr-2"></i>Recomendaciones</h4>
+      <ul class="list-disc pl-4">
+        <li>Optimizar tiempos en ${
+          bottleneck.station || "estaciones críticas"
+        }</li>
+        <li>Revisar controles de calidad</li>
+        <li>Capacitar operarios en estaciones con rechazos</li>
       </ul>
     </div>`;
 
@@ -890,7 +894,10 @@ function initializeDashboard() {
         if (activeButton) initializeSecondaryChart(activeButton.dataset.chart);
       });
     })
-    .catch(console.error);
+    .catch((error) => {
+      console.error("Error cargando datos:", error);
+      // Muestra mensaje de error en UI si es necesario
+    });
 }
 
 // Actualizar todas las gráficas
@@ -938,40 +945,34 @@ function setupChartButtons() {
   });
 }
 
-// Cargar datos y eventos
-d3.json("data/StationsInfo1.json")
-  .then((data) => {
-    chartData = data;
-    console.log("Ejemplo de datos:", chartData[0]);
+document.addEventListener("DOMContentLoaded", function () {
+  Promise.all([
+    d3.json("data/StationsInfo1.json"),
+    d3.json("data/PlantInfo.json"),
+  ])
+    .then(([stations, plant]) => {
+      chartData = stations;
+      plantData = plant;
 
-    // Inicializar solo la gráfica principal
-    initializeMainChartOnly();
-
-    // Actualizar la gráfica principal con los datos actuales
-    const mainChart = chartsConfig.find((config) => config.isMainChart);
-    if (mainChart) {
-      updateChart(mainChart, timeFrames[currentTimeFrameIndex]);
-    }
-
-    // Configurar eventos de botones de gráficas
-    setupChartButtons();
-
-    // Manejar redimensionamiento de la ventana
-    window.addEventListener("resize", () => {
-      // Reinicializar la gráfica principal
-      d3.select("#chart-production").selectAll("svg").remove();
       initializeMainChartOnly();
-      updateChart(mainChart, timeFrames[currentTimeFrameIndex]);
 
-      // Reinicializar la gráfica secundaria activa si existe
-      const activeButton = document.querySelector(".chart-btn.active");
-      if (activeButton) {
-        const chartId = activeButton.dataset.chart;
-        initializeSecondaryChart(chartId);
+      setupChartButtons();
+      updateKPICards();
+      showDataInsights();
+
+      const mainChart = chartsConfig.find((config) => config.isMainChart);
+      if (mainChart) {
+        updateChart(mainChart, timeFrames[currentTimeFrameIndex]);
       }
-    });
-  })
-  .catch(console.error);
+
+      window.addEventListener("resize", () => {
+        d3.select("#chart-production").selectAll("svg").remove();
+        initializeMainChartOnly();
+        updateChart(mainChart, timeFrames[currentTimeFrameIndex]);
+      });
+    })
+    .catch((error) => console.error("Error:", error));
+});
 
 // Eventos de botones de tiempo
 document.getElementById("prev-btn").addEventListener("click", () => {
