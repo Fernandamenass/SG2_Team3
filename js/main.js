@@ -1,4 +1,6 @@
 let chartData; // Datos de la gráfica
+let productData;
+let plantData;
 const timeFrames = ["daily", "weekly", "monthly", "quarter", "year"];
 
 const timeFrameLabels = {
@@ -17,7 +19,16 @@ const timeFrameKeyMap = {
   year: "yearly_data",
 };
 
+const plantTimeFrameKeyMap = {
+  daily: "daily_summary",
+  weekly: "weekly_summary",
+  monthly: "monthly_summary",
+  quarter: "quarterly_summary",
+  year: "yearly_summary",
+};
+
 let currentTimeFrameIndex = 0;
+let currentProductQualityFilter = "all";
 
 // Configuración de cada gráfica con nuevos tipos
 const chartsConfig = [
@@ -28,7 +39,8 @@ const chartsConfig = [
     yLabel: "units",
     color: "#ffb6c1",
     type: "bar",
-    isMainChart: true, // Marcar como gráfica principal
+    isMainChart: true,
+    dataSource: "station",
   },
   {
     container: "#chart-rejected",
@@ -38,6 +50,7 @@ const chartsConfig = [
     color: "#ff94c2",
     type: "pie",
     isMainChart: false,
+    dataSource: "station",
   },
   {
     container: "#chart-delay",
@@ -47,6 +60,7 @@ const chartsConfig = [
     color: "#ffc3a0",
     type: "bar",
     isMainChart: false,
+    dataSource: "station",
   },
   {
     container: "#chart-accidents",
@@ -56,6 +70,7 @@ const chartsConfig = [
     color: "#add8e6",
     type: "line",
     isMainChart: false,
+    dataSource: "station",
   },
   {
     container: "#chart-occupancy",
@@ -65,6 +80,7 @@ const chartsConfig = [
     color: "#c3b1e1",
     type: "area",
     isMainChart: false,
+    dataSource: "station",
   },
   {
     container: "#chart-rejection-percentage",
@@ -74,8 +90,137 @@ const chartsConfig = [
     color: "#f0e68c",
     type: "pie",
     isMainChart: false,
+    dataSource: "station",
+  },
+  {
+    container: "#chart-bottleneck",
+    metric: "bottleneck",
+    title: "Bottleneck Analysis",
+    yLabel: "delay minutes",
+    color: "#d8a1bb",
+    type: "bar",
+    isMainChart: false,
+    dataSource: "plant",
+    customDataFunction: calculateBottleneckData,
   },
 ];
+
+function calculateBottleneckData(timeFrame) {
+  if (!plantData) return [];
+  const summaryKey = plantTimeFrameKeyMap[timeFrame];
+  const stationMetrics = plantData[summaryKey]?.station_metrics || {};
+
+  return Object.keys(stationMetrics)
+    .map((stationId) => ({
+      name: `Station ${String.fromCharCode(65 + parseInt(stationId))}`,
+      bottleneck: stationMetrics[stationId].avg_bottleneck_delay || 0,
+    }))
+    .sort((a, b) => b.bottleneck - a.bottleneck);
+}
+
+function updateKPICards() {
+  const timeFrame = timeFrames[currentTimeFrameIndex];
+  const summaryKey = plantTimeFrameKeyMap[timeFrame];
+
+  if (plantData && plantData[summaryKey]) {
+    const summary = plantData[summaryKey];
+
+    // Update KPI cards
+    document.getElementById("kpi-production").textContent =
+      summary.total_production;
+    document.getElementById("kpi-rejection").textContent =
+      (summary.rejection_rate * 100).toFixed(1) + "%";
+
+    // Calculate average occupancy
+    const stationMetrics = summary.station_metrics;
+    let avgOccupancy = 0;
+    let stationCount = 0;
+
+    for (const stationId in stationMetrics) {
+      avgOccupancy += stationMetrics[stationId].avg_occupancy;
+      stationCount++;
+    }
+
+    if (stationCount > 0) avgOccupancy = avgOccupancy / stationCount;
+    document.getElementById("kpi-occupancy").textContent =
+      (avgOccupancy * 100).toFixed(1) + "%";
+
+    // Calculate total accidents
+    let totalAccidents = 0;
+    if (chartData) {
+      for (const station of chartData) {
+        totalAccidents += station[timeFrameKeyMap[timeFrame]].accidents || 0;
+      }
+    }
+    document.getElementById("kpi-accidents").textContent = totalAccidents;
+  }
+}
+
+function showDataInsights() {
+  const timeFrame = timeFrames[currentTimeFrameIndex];
+  const summaryKey = plantTimeFrameKeyMap[timeFrame];
+  const insightsPanel = document.getElementById("insights-panel");
+
+  let insightsHTML =
+    '<h3 class="text-xl font-semibold mb-3">Key Insights</h3><ul class="space-y-2">';
+
+  if (plantData && plantData[summaryKey]) {
+    const summary = plantData[summaryKey];
+    const rejectionRate = summary.rejection_rate * 100;
+
+    // Production insight
+    insightsHTML += `<li class="flex items-start">
+      <span class="text-green-500 mr-2">✓</span>
+      Total production: ${summary.total_production} units
+    </li>`;
+
+    // Rejection rate insight
+    insightsHTML +=
+      rejectionRate > 5
+        ? `<li class="flex items-start">
+        <span class="text-red-500 mr-2">⚠</span>
+        High rejection rate: ${rejectionRate.toFixed(1)}%
+      </li>`
+        : `<li class="flex items-start">
+        <span class="text-green-500 mr-2">✓</span>
+        Rejection rate: ${rejectionRate.toFixed(1)}%
+      </li>`;
+
+    // Bottleneck insight
+    const stationMetrics = summary.station_metrics;
+    let maxBottleneck = 0;
+    let bottleneckStation = "";
+
+    for (const stationId in stationMetrics) {
+      const delay = stationMetrics[stationId].avg_bottleneck_delay || 0;
+      if (delay > maxBottleneck) {
+        maxBottleneck = delay;
+        bottleneckStation = `Station ${String.fromCharCode(
+          65 + parseInt(stationId)
+        )}`;
+      }
+    }
+
+    if (maxBottleneck > 0) {
+      insightsHTML += `<li class="flex items-start">
+        <span class="text-yellow-500 mr-2">⚠</span>
+        Bottleneck at ${bottleneckStation}: ${maxBottleneck.toFixed(2)} mins
+      </li>`;
+    }
+  }
+
+  insightsHTML += `</ul>
+    <div class="mt-6 bg-blue-50 p-4 rounded">
+      <h3 class="text-lg font-semibold mb-2">Recommendations</h3>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Optimize workflow at bottleneck stations</li>
+        <li>Review quality control processes</li>
+        <li>Balance station workloads</li>
+      </ul>
+    </div>`;
+
+  insightsPanel.innerHTML = insightsHTML;
+}
 
 // Inicializar gráficas
 function initializeCharts() {
@@ -717,6 +862,35 @@ function updateChart(config, timeFrame) {
         .ticks(5)
         .tickFormat((d) => `${d} ${config.yLabel}`)
     );
+}
+
+function initializeDashboard() {
+  Promise.all([
+    d3.json("data/StationsInfo1.json"),
+    d3.json("data/PlantInfo.json"),
+  ])
+    .then(([stations, plant]) => {
+      chartData = stations;
+      plantData = plant;
+
+      initializeMainChartOnly();
+      updateKPICards();
+      showDataInsights();
+      setupChartButtons();
+
+      const mainChart = chartsConfig.find((config) => config.isMainChart);
+      if (mainChart) updateChart(mainChart, timeFrames[currentTimeFrameIndex]);
+
+      window.addEventListener("resize", () => {
+        d3.select("#chart-production").selectAll("svg").remove();
+        initializeMainChartOnly();
+        updateChart(mainChart, timeFrames[currentTimeFrameIndex]);
+
+        const activeButton = document.querySelector(".chart-btn.active");
+        if (activeButton) initializeSecondaryChart(activeButton.dataset.chart);
+      });
+    })
+    .catch(console.error);
 }
 
 // Actualizar todas las gráficas

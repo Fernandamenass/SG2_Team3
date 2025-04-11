@@ -1,0 +1,192 @@
+{
+  "daily_summary": {
+    "total_production": 1161,
+    "total_rejected": 58,
+    "rejection_rate": 0.0475799835931091,
+    "supplier_utilization": 0.15782860112407485,
+    "station_metrics": {
+      "0": {
+        "avg_occupancy": 0.9972542841000626,
+        "avg_downtime": 12.167264092297836,
+        "avg_bottleneck_delay": 6.18764299057754e-14
+      },
+      "1": {
+        "avg_occupancy": 0.9859927089052635,
+        "avg_downtime": 9.837233320692981,
+        "avg_bottleneck_delay": 4.796163466380676e-14
+      },
+      "2": {
+        "avg_occupancy": 0.974641295842599,
+        "avg_downtime": 37.40238070740729,
+        "avg_bottleneck_delay": 1.0325074129013956e-13
+      },
+      "3": {
+        "avg_occupancy": 0.94614912432329,
+        "avg_downtime": 100.15348901620517,
+        "avg_bottleneck_delay": 8.408089039827853e-14
+      },
+      "4": {
+        "avg_occupancy": 0.9321131922504386,
+        "avg_downtime": 39.21468080779215,
+        "avg_bottleneck_delay": 4.389081690684785e-14
+      },
+      "5": {
+        "avg_occupancy": 0.9444983176446249,
+        "avg_downtime": 21.921295683634114,
+        "avg_bottleneck_delay": 2.0516921495072893e-13
+      }
+    }
+  },
+  "weekly_summary": {
+    "total_production": 8092,
+    "total_rejected": 483,
+    "rejection_rate": 0.0563265306122449,
+    "supplier_utilization": 0.16217259691848587,
+    "station_metrics": {
+      "0": {
+        "avg_occupancy": 0.9971569311309237,
+        "avg_downtime": 11.593757397145632,
+        "avg_bottleneck_delay": 7.154594377262973e-14
+      },
+      "1": {
+        "avg_occupancy": 0.9840384530339257,
+        "avg_downtime": 8.414619545838361,
+        "avg_bottleneck_delay": 8.009889048328962e-14
+      },
+      "2": {
+        "avg_occupancy": 0.9706386981763675,
+        "avg_downtime": 44.514874095682394,
+        "avg_bottleneck_delay": 7.599212264743811e-14
+      },
+      "3": {
+        "avg_occupancy": 0.9484880006996065,
+        "avg_downtime": 112.59605646693629,
+        "avg_bottleneck_delay": 0.09051972585927943
+      },
+      "4": {
+        "avg_occupancy": 0.943459210308345,
+        "avg_downtime": 46.422648167480865,
+        "avg_bottleneck_delay": 6.502734858518773e-14
+      },
+      "5": {
+        "avg_occupancy": 0.9386204912240298,
+        "avg_downtime": 43.79694411913567,
+        "avg_bottleneck_delay": 0.005685905945530344
+      }
+    }
+  },
+  "monthly_summary": {
+    "total_production": 34567,
+    "total_rejected": 2080,
+    "rejection_rate": 0.056757715501951043,
+    "supplier_utilization": 0.16069791102343078,
+    "station_metrics": {
+      "0": {
+        "avg_occupancy": 0.9967050055842781,
+        "avg_downtime": 14.192394343382679,
+        "avg_bottleneck_delay": 7.075673380541047e-14
+      },
+      "1": {
+        "avg_occupancy": 0.9823384736820612,
+        "avg_downtime": 7.70650367151035,
+        "avg_bottleneck_delay": 0.0034559931801269026
+      },
+      "2": {
+        "avg_occupancy": 0.9681970290288197,
+        "avg_downtime": 36.122537806465985,
+        "avg_bottleneck_delay": 0.0023701351064157328
+      },
+      "3": {
+        "avg_occupancy": 0.9519468740859669,
+        "avg_downtime": 107.33538391335163,
+        "avg_bottleneck_delay": 0.046053795578555934
+      },
+      "4": {
+        "avg_occupancy": 0.9404541204247906,
+        "avg_downtime": 44.225624810929595,
+        "avg_bottleneck_delay": 0.002776358800726569
+      },
+      "5": {
+        "avg_occupancy": 0.9348311298002108,
+        "avg_downtime": 40.863431626179654,
+        "avg_bottleneck_delay": 0.001571784234900209
+      }
+    }
+  },
+  "quarterly_summary": {
+    "total_production": 103624,
+    "total_rejected": 6452,
+    "rejection_rate": 0.05861404847559868,
+    "supplier_utilization": 0.1607170052886234,
+    "station_metrics": {
+      "0": {
+        "avg_occupancy": 0.9965670747516628,
+        "avg_downtime": 14.992855710040574,
+        "avg_bottleneck_delay": 0.0005952025206129808
+      },
+      "1": {
+        "avg_occupancy": 0.9815486581312994,
+        "avg_downtime": 7.418870007023338,
+        "avg_bottleneck_delay": 0.0032688755166126386
+      },
+      "2": {
+        "avg_occupancy": 0.9682851321242109,
+        "avg_downtime": 36.25423511652396,
+        "avg_bottleneck_delay": 0.0013162897555034185
+      },
+      "3": {
+        "avg_occupancy": 0.952724755032207,
+        "avg_downtime": 109.13809469442471,
+        "avg_bottleneck_delay": 0.030020741577422547
+      },
+      "4": {
+        "avg_occupancy": 0.9394996973165325,
+        "avg_downtime": 45.810140259103164,
+        "avg_bottleneck_delay": 0.007417815580710939
+      },
+      "5": {
+        "avg_occupancy": 0.934858911311752,
+        "avg_downtime": 42.566540545504346,
+        "avg_bottleneck_delay": 0.009256534562136874
+      }
+    }
+  },
+  "yearly_summary": {
+    "total_production": 420373,
+    "total_rejected": 26306,
+    "rejection_rate": 0.058892403717210794,
+    "supplier_utilization": 0.16089426252880634,
+    "station_metrics": {
+      "0": {
+        "avg_occupancy": 0.9965338828541531,
+        "avg_downtime": 15.181936861599057,
+        "avg_bottleneck_delay": 0.003958067597705059
+      },
+      "1": {
+        "avg_occupancy": 0.9815084043280752,
+        "avg_downtime": 7.490312803876257,
+        "avg_bottleneck_delay": 0.0016454783641256599
+      },
+      "2": {
+        "avg_occupancy": 0.9679704344354157,
+        "avg_downtime": 36.57121465500036,
+        "avg_bottleneck_delay": 0.007851282393895185
+      },
+      "3": {
+        "avg_occupancy": 0.9530689056640815,
+        "avg_downtime": 108.37628746679846,
+        "avg_bottleneck_delay": 0.024592176639480743
+      },
+      "4": {
+        "avg_occupancy": 0.9390946185425825,
+        "avg_downtime": 48.4051073747306,
+        "avg_bottleneck_delay": 0.014401725631301229
+      },
+      "5": {
+        "avg_occupancy": 0.9342566725645114,
+        "avg_downtime": 41.482591477000575,
+        "avg_bottleneck_delay": 0.015161990060714673
+      }
+    }
+  }
+}

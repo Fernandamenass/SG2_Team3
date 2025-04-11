@@ -7,6 +7,7 @@
 
     @author: Eduardo Ulises Martinez
     @author: Fernanda Mena
+    @author: Brandon Avalos
 """
 
 import time
@@ -66,6 +67,7 @@ class ManufacturingFacility:
         self.supplier_busy_time = 0
         self.last_product_time = 0
         self.failure_probs = [0.02, 0.01, 0.05, 0.15, 0.07, 0.06]
+        self.product_metrics = {}
         
     def resupply_bin(self, station_id):
         """! Process to resupply materials to a station's bin.
@@ -108,6 +110,13 @@ class ManufacturingFacility:
             if delay > 0:
                 self.metrics[station_id].bottleneck_delays.append(delay)
         self.last_product_time = self.env.now
+        
+        # Simulación de rechazo por estación (opcional: puedes variar la probabilidad por estación)
+        if np.random.random() < 0.01:  # 1% de rechazo por estación (puedes ajustar)
+            self.metrics[station_id].rejected_products += 1
+            self.product_metrics[product_id]["quality"] = "rejected"
+            raise simpy.Interrupt(f"Producto {product_id} rechazado en estación {station_id}")
+
 
     def process_product(self, product_id):
         """! Process a single product through all stations.
@@ -115,52 +124,132 @@ class ManufacturingFacility:
         @return Generator for SimPy environment
         """
 
+        self.product_metrics[product_id] = {
+            "start_time": self.env.now,
+            "end_time": None,
+            "stations_visit": [],
+            "quality": "unknown",
+            "total_wait_time": 0,
+            "total_process_time": 0
+        }
+
+        # Procesar por estaciones secuenciales (0 a 3)
         for i in range(4):
+            station_start = self.env.now
             if self.bins[i] <= 0:
                 yield self.env.process(self.resupply_bin(i))
             self.bins[i] -= 1
-            
+
             start_queue = self.env.now
             with self.stations[i].request() as req:
                 yield req
-                yield self.env.process(self.process_station(product_id, i, start_queue))
-        
-        start_queue = self.env.now
+                wait_time = self.env.now - start_queue
+                self.product_metrics[product_id]["total_wait_time"] += wait_time
+
+                process_start = self.env.now
+                try:
+                    yield self.env.process(self.process_station(product_id, i, start_queue))
+                except simpy.Interrupt:
+                    self.metrics[i].rejected_products += 1
+                    self.rejected_products += 1
+                    self.product_metrics[product_id]["quality"] = "rejected"
+                    self.product_metrics[product_id]["end_time"] = self.env.now
+                    return
+
+                process_time = self.env.now - process_start
+                self.product_metrics[product_id]["stations_visit"].append({
+                    "station_id": i,
+                    "entry_time": station_start,
+                    "exit_time": self.env.now,
+                    "wait_time": wait_time,
+                    "process_time": process_time
+                })
+                self.product_metrics[product_id]["total_process_time"] += process_time
+                self.metrics[i].good_products += 1
+
+        # Elegir primera estación paralela (4 o 5)
         if len(self.stations[4].queue) <= len(self.stations[5].queue):
             parallel_first = 4
         else:
             parallel_first = 5
-            
+
+        # Procesar en primera paralela
+        station_start = self.env.now
         if self.bins[parallel_first] <= 0:
             yield self.env.process(self.resupply_bin(parallel_first))
         self.bins[parallel_first] -= 1
-        
+
+        start_queue = self.env.now
         with self.stations[parallel_first].request() as req:
             yield req
-            yield self.env.process(self.process_station(product_id, parallel_first, start_queue))
-        
-        parallel_second = 9 - parallel_first 
-        start_queue = self.env.now
-        
+            wait_time = self.env.now - start_queue
+            self.product_metrics[product_id]["total_wait_time"] += wait_time
+
+            process_start = self.env.now
+            try:
+                yield self.env.process(self.process_station(product_id, parallel_first, start_queue))
+            except simpy.Interrupt:
+                self.metrics[parallel_first].rejected_products += 1
+                self.rejected_products += 1
+                self.product_metrics[product_id]["quality"] = "rejected"
+                self.product_metrics[product_id]["end_time"] = self.env.now
+                return
+
+            process_time = self.env.now - process_start
+            self.product_metrics[product_id]["stations_visit"].append({
+                "station_id": parallel_first,
+                "entry_time": station_start,
+                "exit_time": self.env.now,
+                "wait_time": wait_time,
+                "process_time": process_time
+            })
+            self.product_metrics[product_id]["total_process_time"] += process_time
+            self.metrics[parallel_first].good_products += 1
+
+        # Segunda estación paralela
+        parallel_second = 9 - parallel_first
+        station_start = self.env.now
         if self.bins[parallel_second] <= 0:
             yield self.env.process(self.resupply_bin(parallel_second))
         self.bins[parallel_second] -= 1
-        
+
+        start_queue = self.env.now
         with self.stations[parallel_second].request() as req:
             yield req
-            yield self.env.process(self.process_station(product_id, parallel_second, start_queue))
-        
+            wait_time = self.env.now - start_queue
+            self.product_metrics[product_id]["total_wait_time"] += wait_time
 
-        if np.random.random() < 0.05:
-            self.rejected_products += 1
-            self.metrics[parallel_second].rejected_products += 1
-        else:
-            self.total_production += 1
+            process_start = self.env.now
+            try:
+                yield self.env.process(self.process_station(product_id, parallel_second, start_queue))
+            except simpy.Interrupt:
+                self.metrics[parallel_second].rejected_products += 1
+                self.rejected_products += 1
+                self.product_metrics[product_id]["quality"] = "rejected"
+                self.product_metrics[product_id]["end_time"] = self.env.now
+                return
+
+            process_time = self.env.now - process_start
+            self.product_metrics[product_id]["stations_visit"].append({
+                "station_id": parallel_second,
+                "entry_time": station_start,
+                "exit_time": self.env.now,
+                "wait_time": wait_time,
+                "process_time": process_time
+            })
+            self.product_metrics[product_id]["total_process_time"] += process_time
             self.metrics[parallel_second].good_products += 1
 
-    def run_simulation(self, run_id, simulation_time):
-        """! Run the manufacturing facility simulation.
-        @param run_id Identifier for the simulation run
+        # Si llegó al final sin rechazo
+        self.total_production += 1
+        self.product_metrics[product_id]["quality"] = "good"
+        self.product_metrics[product_id]["end_time"] = self.env.now
+
+    
+    
+    # This is the fixed method - it no longer creates a new facility and environment
+    def run_production(self, simulation_time):
+        """! Run the manufacturing facility production process
         @param simulation_time Total time to simulate
         @return Generator for SimPy environment
         """
@@ -169,7 +258,7 @@ class ManufacturingFacility:
             if np.random.random() < 0.0001 / (simulation_time / 24): 
                 accident_station = np.random.randint(0, 6)
                 self.metrics[accident_station].accident_count += 1
-                print(f"Facility accident at time {self.env.now} in Run {run_id}. Stopping this simulation run.")
+                print(f"Facility accident at time {self.env.now}. Stopping this simulation run.")
                 break
             
             self.env.process(self.process_product(product_id))
@@ -180,17 +269,18 @@ class ManufacturingFacility:
             else:
                 yield self.env.timeout(1)
 
-def run_simulation(seed, run_id, simulation_time):
+def run_simulation(run_id, simulation_time):
     """! Execute a single simulation run with specified parameters.
-    @param seed Random seed for reproducibility
     @param run_id Identifier for the simulation run
     @param simulation_time Total time to simulate
     @return Dict containing simulation results and metrics
     """
-    np.random.seed(seed)
+    np.random.seed(run_id + 1000)
     env = simpy.Environment()
     facility = ManufacturingFacility(env)
-    env.process(facility.run_simulation(run_id, simulation_time))
+    
+    # Fixed: Use the new run_production method instead of recursively calling run_simulation
+    env.process(facility.run_production(simulation_time))
     env.run(until=simulation_time)
     
     results = {
@@ -198,7 +288,8 @@ def run_simulation(seed, run_id, simulation_time):
         'production': facility.total_production,
         'rejected': facility.rejected_products,
         'supplier_occupancy': facility.supplier_busy_time / simulation_time,
-        'stations': {}
+        'stations': {},
+        'products': facility.product_metrics
     }
     
     for i, metrics in facility.metrics.items():
@@ -223,9 +314,9 @@ def run_simulation_per_run(num_runs, simulation_time):
     @return List of results from all runs
     """
     all_results = []
-    random_seeds = np.random.randint(1, 1000000, size=num_runs)
-    for run_id, seed in enumerate(random_seeds):
-        result = run_simulation(seed, run_id, simulation_time)
+    
+    for run_id in range(num_runs):
+        result = run_simulation(run_id, simulation_time)
         all_results.append(result)
     
     print("\nPer-Run Simulation Results:")
@@ -252,9 +343,9 @@ def run_all_runs(num_runs, simulation_time):
     @return List of results from all runs
     """
     all_results = []
-    random_seeds = np.random.randint(1, 1000000, size=num_runs)
-    for run_id, seed in enumerate(random_seeds):
-        result = run_simulation(seed, run_id, simulation_time)
+    
+    for run_id in range(num_runs):
+        result = run_simulation(run_id, simulation_time)
         all_results.append(result)
     
     print("\nSimulation Results Summary (All Runs):")
@@ -265,7 +356,7 @@ def run_all_runs(num_runs, simulation_time):
     supplier_occs = [r['supplier_occupancy'] for r in all_results]
     
     print(f"Average Production per Run: {np.mean(productions):.2f}")
-    print(f"Average Rejection Rate: {np.mean([r/(p+r) for p,r in zip(productions, rejections)]):.3f}")
+    print(f"Average Rejection Rate: {np.mean([r/(p+r) for p,r in zip(productions, rejections) if (p+r) > 0]):.3f}")
     print(f"Average Supplier Occupancy: {np.mean(supplier_occs):.3f}")
     
     print("\nWorkstation Statistics (All Runs):")
@@ -280,7 +371,5 @@ def run_all_runs(num_runs, simulation_time):
     
     return all_results
 
-# Example usage:
-# Run 5 simulations with 5000 time units each
-# run_simulation_per_run(num_runs=5, simulation_time=5000)
-run_all_runs(num_runs=100, simulation_time=5000)
+if __name__ == "__main__":
+    run_all_runs(num_runs=5, simulation_time=5000)
